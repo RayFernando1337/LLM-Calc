@@ -20,19 +20,14 @@ def quantization_options():
     Return a dictionary of quantization options and their corresponding bits per parameter.
     """
     return {
-        "q4": 4,
-        "q5": 5,
-        "q8": 8,
+        "1-bit": 1,
+        "2-bit": 2,
+        "3-bit": 3,
+        "4-bit": 4,
+        "5-bit": 5,
+        "6-bit": 6,
+        "8-bit": 8,
         "fp16": 16,
-        "q2_K": 2,
-        "q3_K_S": 3.5,  # Example value, adjust as needed
-        "q3_K_M": 3.75,  # Example value, adjust as needed
-        "q3_K_L": 4,  # Example value, adjust as needed
-        "q4_K_S": 4.5,  # Example value, adjust as needed
-        "q4_K_M": 4.75,  # Example value, adjust as needed
-        "q5_K_S": 5.5,  # Example value, adjust as needed
-        "q5_K_M": 5.75,  # Example value, adjust as needed
-        "q6_K": 6,
     }
 
 def main():
@@ -58,10 +53,12 @@ def main():
     else:
         st.write('Please select a valid quantization level.')
 
-    st.sidebar.write('Quantization levels explanation:')
-    st.sidebar.write('- q2_K, q3_K_S, q3_K_M, q3_K_L, q4_K_S, q4_K_M, q5_K_S, q5_K_M, q6_K: Quantization levels for different model sizes (S, M, L)')
-    st.sidebar.write('- q4, q5, q8: General quantization levels')
-    st.sidebar.write('- fp16: Half-precision floating point')
+    st.sidebar.title('Quantization Levels Explanation')
+    st.sidebar.write('Quantization is a technique used to reduce the memory footprint and computational cost of LLMs by representing the model parameters with fewer bits.')
+    st.sidebar.write('Lower bit precisions result in smaller model sizes and faster inference but may impact accuracy. Higher bit precisions retain more information but require more memory and computation.')
+    st.sidebar.write('- 1-bit to 6-bit: Low-precision quantization levels. These offer the smallest model sizes but may have a more significant impact on accuracy. 1-bit quantization (binary weights) is an extreme case that can greatly reduce memory usage but may only be suitable for certain types of models or applications.')
+    st.sidebar.write('- 8-bit: Common quantization level for many LLMs. It provides a good balance between model size reduction and preserving accuracy. Many hardware platforms have native support for 8-bit arithmetic, making it efficient for inference.')
+    st.sidebar.write('- fp16: Half-precision floating-point format. It offers higher precision than the quantized options but still reduces the memory footprint compared to full-precision floating-point (fp32). fp16 is commonly used for training and can be used for inference on GPUs with native fp16 support.')
 
 if __name__ == '__main__':
     main()
