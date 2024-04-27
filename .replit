@@ -1,0 +1,18 @@
+entrypoint = "main.py"
+run = ["streamlit", "run", "main.py", "--server.headless", "true"]
+
+modules = ["python-3.10:v18-20230807-322e88b"]
+
+hidden = [".pythonlibs"]
+
+[nix]
+channel = "stable-23_05"
+
+[deployment]
+run = ["streamlit", "run", "--server.address", "0.0.0.0", "--server.headless", "true", "--server.enableCORS=false", "--server.enableWebsocketCompression=false", "--server.runOnSave=false", "main.py"]
+ignorePorts = false
+deploymentTarget = "gce"
+
+[[ports]]
+localPort = 8501
+externalPort = 80
