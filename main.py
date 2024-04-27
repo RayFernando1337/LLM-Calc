@@ -1,6 +1,5 @@
 import streamlit as st
 
-
 def calculate_max_parameters(available_ram_gb, bits_per_parameter, os_overhead_gb=2):
     """
     Calculate the maximum number of parameters that can fit in the available RAM.
@@ -16,7 +15,6 @@ def calculate_max_parameters(available_ram_gb, bits_per_parameter, os_overhead_g
     max_parameters = usable_ram_bytes / bytes_per_parameter  # Calculate number of parameters
     return max_parameters / 1e9  # Convert back to billions for display
 
-
 def quantization_options():
     """
     Return a dictionary of quantization options and their corresponding bits per parameter.
@@ -30,8 +28,9 @@ def quantization_options():
         "6-bit": 6,
         "8-bit": 8,
         "fp16": 16,
+        "bfloat16": 16,
+        "fp32": 32
     }
-
 
 def main():
     """
@@ -48,10 +47,7 @@ def main():
     st.write('You can update the available RAM and estimated OS RAM usage in the sidebar.')
 
     quantizations = quantization_options()
-    # Default option - find the index of "4-bit"
     default_quantization_index = list(quantizations.keys()).index("4-bit")  # Get the index of "4-bit"
-
-    # Update selectbox to have "4-bit" selected by default 
     quantization_selected = st.selectbox('Select a quantization level:', list(quantizations.keys()), index=default_quantization_index)
 
     if quantization_selected in quantizations:
@@ -61,11 +57,11 @@ def main():
         st.write('Please select a valid quantization level.')
 
     st.sidebar.title('Quantization Levels Explanation')
-    st.sidebar.write('Quantization is a technique used to reduce the memory footprint and computational cost of LLMs by representing the model parameters with fewer bits.')
-    st.sidebar.write('Lower bit precisions result in smaller model sizes and faster inference but may impact accuracy. Higher bit precisions retain more information but require more memory and computation.')
-    st.sidebar.write('- 1-bit to 6-bit: Low-precision quantization levels. These offer the smallest model sizes but may have a more significant impact on accuracy. 1-bit quantization (binary weights) is an extreme case that can greatly reduce memory usage but may only be suitable for certain types of models or applications.')
-    st.sidebar.write('- 8-bit: Common quantization level for many LLMs. It provides a good balance between model size reduction and preserving accuracy. Many hardware platforms have native support for 8-bit arithmetic, making it efficient for inference.')
-    st.sidebar.write('- fp16: Half-precision floating-point format. It offers higher precision than the quantized options but still reduces the memory footprint compared to full-precision floating-point (fp32). fp16 is commonly used for training and can be used for inference on GPUs with native fp16 support.')
+    st.sidebar.write('Quantization reduces the memory footprint and computational cost of LLMs. Each level has a different impact on model size, speed, and accuracy.')
+    st.sidebar.write('- **1-bit to 6-bit**: Extremely low precision, major impact on accuracy. Best for specific applications where memory and speed are critical.')
+    st.sidebar.write('- **8-bit**: Standard in many LLM deployments. Good balance of size, speed, and accuracy.')
+    st.sidebar.write('- **fp16, bfloat16**: Half-precision formats offering significant reduction in size with less impact on accuracy than integer quantization. Widely supported on modern GPUs.')
+    st.sidebar.write('- **fp32**: Full precision used during model training, rarely used in deployment due to high computational costs.')
 
 if __name__ == '__main__':
     main()
