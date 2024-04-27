@@ -1,5 +1,12 @@
 import streamlit as st
 
+st.set_page_config(
+    page_title="LLM RAM Calculator by Ray Fernando",  # Set the title that will be displayed in the browser tab
+    # page_icon=":brain:",  # Optional: you can set an emoji or path to an image file as the icon
+    # layout="wide",  # Optional: use "wide" or "centered" to set the default layout of the app
+    # initial_sidebar_state="expanded"  # Optional: use "expanded" or "collapsed" to set the sidebar state
+)
+
 
 def calculate_max_parameters(available_ram_gb, bits_per_parameter, os_overhead_gb=2):
     """
