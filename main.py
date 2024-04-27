@@ -1,5 +1,6 @@
 import streamlit as st
 
+
 def calculate_max_parameters(available_ram_gb, bits_per_parameter, os_overhead_gb=2):
     """
     Calculate the maximum number of parameters that can fit in the available RAM.
@@ -14,6 +15,7 @@ def calculate_max_parameters(available_ram_gb, bits_per_parameter, os_overhead_g
     usable_ram_bytes = total_ram_bytes - (os_overhead_gb * 1e9)  # Subtract OS overhead
     max_parameters = usable_ram_bytes / bytes_per_parameter  # Calculate number of parameters
     return max_parameters / 1e9  # Convert back to billions for display
+
 
 def quantization_options():
     """
@@ -30,6 +32,7 @@ def quantization_options():
         "fp16": 16,
     }
 
+
 def main():
     """
     Main function to run the Streamlit app.
@@ -45,7 +48,11 @@ def main():
     st.write('You can update the available RAM and estimated OS RAM usage in the sidebar.')
 
     quantizations = quantization_options()
-    quantization_selected = st.selectbox('Select a quantization level:', list(quantizations.keys()))
+    # Default option - find the index of "4-bit"
+    default_quantization_index = list(quantizations.keys()).index("4-bit")  # Get the index of "4-bit"
+
+    # Update selectbox to have "4-bit" selected by default 
+    quantization_selected = st.selectbox('Select a quantization level:', list(quantizations.keys()), index=default_quantization_index)
 
     if quantization_selected in quantizations:
         max_parameters = calculate_max_parameters(available_ram, quantizations[quantization_selected], os_overhead_gb)
