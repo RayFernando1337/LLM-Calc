@@ -41,10 +41,9 @@ def main():
     """
     st.title('LLM RAM Requirement Calculator for Various Quantizations')
 
-    available_ram = st.number_input('Enter your available RAM in GB:', min_value=1.0, value=16.0, step=0.5)
-    st.markdown(f'<p style="font-size: 20px;"><strong>Available RAM:</strong> {available_ram} GB</p>', unsafe_allow_html=True)
-
-    overhead_ratio = st.slider('Overhead ratio:', min_value=0.0, max_value=1.0, value=0.3, step=0.05)
+    st.sidebar.title('Settings')
+    available_ram = st.sidebar.number_input('Enter your available RAM in GB:', min_value=1.0, value=16.0, step=0.5)
+    overhead_ratio = st.sidebar.slider('Overhead ratio:', min_value=0.0, max_value=1.0, value=0.3, step=0.05)
 
     quantizations = quantization_options()
     quantization_selected = st.selectbox('Select a quantization level:', list(quantizations.keys()))
@@ -54,11 +53,11 @@ def main():
         st.markdown(f'<h3 style="font-size: 24px; color: green;">With <strong>{quantization_selected}</strong> quantization, you can run a model with up to <strong>{max_parameters:.2f} billion parameters</strong>.</h3>', unsafe_allow_html=True)
     else:
         st.write('Please select a valid quantization level.')
-    st.markdown('---')
-    st.write('Quantization levels explanation:')
-    st.write('- q2_K, q3_K_S, q3_K_M, q3_K_L, q4_K_S, q4_K_M, q5_K_S, q5_K_M, q6_K: Quantization levels for different model sizes (S, M, L)')
-    st.write('- q4, q5, q8: General quantization levels')
-    st.write('- fp16: Half-precision floating point')
+
+    st.sidebar.write('Quantization levels explanation:')
+    st.sidebar.write('- q2_K, q3_K_S, q3_K_M, q3_K_L, q4_K_S, q4_K_M, q5_K_S, q5_K_M, q6_K: Quantization levels for different model sizes (S, M, L)')
+    st.sidebar.write('- q4, q5, q8: General quantization levels')
+    st.sidebar.write('- fp16: Half-precision floating point')
 
 if __name__ == '__main__':
     main()
