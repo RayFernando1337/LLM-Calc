@@ -8,18 +8,20 @@ st.set_page_config(
 )
 
 
-def calculate_max_parameters(available_ram_gb, bits_per_parameter, os_overhead_gb=2):
+def calculate_max_parameters(available_ram_gb, bits_per_parameter, os_overhead_gb=2, context_window=2048):
     """
     Calculate the maximum number of parameters that can fit in the available RAM.
 
     :param available_ram_gb: Available RAM in gigabytes.
     :param bits_per_parameter: Number of bits per parameter based on the quantization level.
     :param os_overhead_gb: Estimated RAM used by the operating system in gigabytes (default is 2 GB).
+    :param context_window: Number of tokens in the context window (default is 2048).
     :return: Maximum number of parameters in billions.
     """
     bytes_per_parameter = bits_per_parameter / 8  # Convert bits to bytes
     total_ram_bytes = available_ram_gb * 1e9  # Convert GB to bytes
-    usable_ram_bytes = total_ram_bytes - (os_overhead_gb * 1e9)  # Subtract OS overhead
+    context_memory_bytes = context_window * 0.5 * 1e6  # Convert context window to bytes
+    usable_ram_bytes = total_ram_bytes - (os_overhead_gb * 1e9) - context_memory_bytes  # Subtract OS overhead and context memory
     max_parameters = usable_ram_bytes / bytes_per_parameter  # Calculate number of parameters
     return max_parameters / 1e9  # Convert back to billions for display
 
@@ -51,17 +53,22 @@ def main():
     available_ram = st.sidebar.number_input('Enter your available RAM in GB:', min_value=1.0, value=16.0, step=8.0)
     os_overhead_gb = st.sidebar.slider('Estimated OS RAM Usage (GB):', min_value=1.0, max_value=8.0, value=2.0, step=0.5,
                                        help='Estimate of the RAM used by the operating system (OS). Adjust this value based on your system.')
+    context_window = st.sidebar.number_input('Context Window (Number of Tokens):', min_value=1, value=2048, step=1,
+                                             help='Number of tokens in the context window. Each token requires 0.5 MB of memory.')
 
     st.markdown(f'<p style="font-size: 20px;"><strong>Available RAM:</strong> {available_ram} GB</p>', unsafe_allow_html=True)
-    st.write('You can update the available RAM and estimated OS RAM usage in the sidebar.')
+    st.write('You can update the available RAM, estimated OS RAM usage, and context window in the sidebar.')
 
     quantizations = quantization_options()
     default_quantization_index = list(quantizations.keys()).index("4-bit")  # Get the index of "4-bit"
     quantization_selected = st.selectbox('Select a quantization level:', list(quantizations.keys()), index=default_quantization_index)
 
     if quantization_selected in quantizations:
-        max_parameters = calculate_max_parameters(available_ram, quantizations[quantization_selected], os_overhead_gb)
-        st.markdown(f'<h3 style="font-size: 24px; color: green;">With <strong>{quantization_selected}</strong> quantization, you can run a model with up to <strong>{max_parameters:.2f} billion parameters</strong>.</h3>', unsafe_allow_html=True)
+        max_parameters = calculate_max_parameters(available_ram, quantizations[quantization_selected], os_overhead_gb, context_window)
+        if max_parameters >= 0:
+            st.markdown(f'<h3 style="font-size: 24px; color: green;">With <strong>{quantization_selected}</strong> quantization and a context window of <strong>{context_window}</strong> tokens, you can run a model with up to <strong>{max_parameters:.2f} billion parameters</strong>.</h3>', unsafe_allow_html=True)
+        else:
+            st.markdown(f'<h3 style="font-size: 24px; color: red;">The selected context window size of <strong>{context_window}</strong> tokens is too large for the available RAM. Please reduce the context window size or increase the available RAM.</h3>', unsafe_allow_html=True)
     else:
         st.write('Please select a valid quantization level.')
 
