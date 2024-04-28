@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "python-template"
-version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+name = "llm-ram-calculator"
+version = "1.0.0"
+description = "A Streamlit app to calculate the maximum number of LLM parameters fitting in available RAM."
+authors = ["Ray Fernando <rayfernando.ai>"]
 
 [tool.poetry.dependencies]
 python = ">=3.10.0,<3.11"
