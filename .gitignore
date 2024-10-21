@@ -37,3 +37,6 @@ dist-ssr
 
 # Vercel
 .vercel
+
+# Bun lock file
+bun.lockb
