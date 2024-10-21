@@ -1,50 +1,75 @@
-# React + TypeScript + Vite
+# LLM RAM Requirement Calculator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a React + TypeScript + Vite application that calculates the maximum number of parameters that can fit in RAM for different quantization levels of large language models (LLMs).
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Calculate maximum parameters based on available RAM, OS usage, context window size, and quantization level
+- Interactive UI built with React and TypeScript
+- Fast development with Vite and Hot Module Replacement (HMR)
+- Styling with Tailwind CSS
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Setup Instructions
 
-- Configure the top-level `parserOptions` property like this:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/llm-ram-calculator.git
+   cd llm-ram-calculator
+   ```
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+2. Install dependencies:
+   ```bash
+   bun install
+   ```
+
+3. Start the development server:
+   ```bash
+   bun run dev
+   ```
+
+4. Open your browser and navigate to `http://localhost:5173` (or the port specified in the console output).
+
+## Building for Production
+
+To create a production build:
+
+```bash
+bun run build
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+The built files will be in the `dist` directory.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Usage
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+Once the application is running, you can:
+
+1. Enter your available RAM in GB
+2. Estimate OS RAM usage in GB
+3. Set the context window size (number of tokens)
+4. Choose a quantization level (bits per parameter)
+
+The app will calculate and display the maximum number of parameters your setup can handle in billions.
+
+## Calculation Logic
+
+The calculation logic remains the same as in the previous version:
+
+1. Convert available RAM and OS overhead from GB to bytes
+2. Calculate memory required for the context window
+3. Calculate usable RAM by subtracting OS overhead and context window memory
+4. Convert quantization level from bits to bytes per parameter
+5. Calculate maximum number of parameters
+6. Convert result to billions of parameters for display
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+[MIT License](LICENSE)
+
+## Acknowledgements
+
+This project was bootstrapped with Vite and uses React, TypeScript, and Tailwind CSS. It uses Bun as the JavaScript runtime and package manager.

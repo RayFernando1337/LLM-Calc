@@ -15,7 +15,6 @@ const quantizationOptions = {
   "6-bit": 6,
   "8-bit": 8,
   "fp16": 16,
-  "bfloat16": 16,
   "fp32": 32
 } as const
 
