@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ChevronDown, Settings } from "lucide-react"
+import { ChevronDown, Settings, Github, Twitter, Youtube } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -49,108 +49,133 @@ export default function LlmRamCalculator() {
   }
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold">LLM RAM Calculator</h1>
-      </div>
-      <div className="space-y-6">
-        <div className="text-center space-y-2">
-          <p className="text-5xl font-bold tabular-nums text-green-600">{maxParameters.toFixed(2)}</p>
-          <p className="text-2xl">billion parameters</p>
+    <div className="flex flex-col min-h-screen">
+      <header className="sticky top-0 bg-background z-10 shadow-md">
+        <div className="container mx-auto py-4">
+          <h1 className="text-3xl font-bold text-center">LLM RAM Calculator</h1>
         </div>
-        <div className="text-center space-y-2">
-          <p className="text-4xl font-bold tabular-nums">{effectiveRam}</p>
-          <p className="text-xl">GB RAM</p>
-        </div>
-        <div className="text-center space-y-2">
-          <p className="text-4xl font-bold">{quantization}</p>
-          <p className="text-xl">Quantization</p>
-        </div>
-      </div>
-      <div className="flex flex-col space-y-4">
-        <div className="w-full space-y-2">
-          <Label htmlFor="ram-slider" className="text-lg font-semibold">Available RAM (GB)</Label>
-          <Slider
-            id="ram-slider"
-            min={0}
-            max={ramOptions.length - 1}
-            step={1}
-            value={[ramOptions.indexOf(availableRam)]}
-            onValueChange={handleRamChange}
-            className="w-full"
-          />
-          <div className="flex justify-between text-sm text-muted-foreground">
-            {ramOptions.map((value) => (
-              <span key={value}>{value}</span>
-            ))}
+      </header>
+
+      <main className="flex-grow container mx-auto px-4 py-8">
+        <div className="max-w-md mx-auto space-y-6">
+          <div className="text-center space-y-2">
+            <p className="text-5xl font-bold tabular-nums text-green-600">{maxParameters.toFixed(2)}</p>
+            <p className="text-2xl">billion parameters</p>
           </div>
-        </div>
-        <div className="w-full">
-          <Label htmlFor="quantization" className="text-lg font-semibold">Quantization Level</Label>
-          <Select value={quantization} onValueChange={(value) => setQuantization(value as QuantizationOption)}>
-            <SelectTrigger id="quantization" className="w-full text-xl">
-              <SelectValue placeholder="Select quantization" />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.keys(quantizationOptions).map((option) => (
-                <SelectItem key={option} value={option} className="text-lg">
-                  {option}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline" className="w-full text-lg">
-              <Settings className="mr-2 h-5 w-5" />
-              Advanced Settings
-              <ChevronDown className="ml-auto h-5 w-5" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-full p-4">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="custom-ram" className="font-semibold">Custom RAM (GB)</Label>
-                <Input
-                  id="custom-ram"
-                  type="number"
-                  value={customRam}
-                  onChange={(e) => {
-                    setCustomRam(Number(e.target.value))
-                    setUseCustomRam(true)
-                  }}
-                  min={1}
-                  step={1}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="os-overhead" className="font-semibold">OS Overhead (GB)</Label>
-                <Slider
-                  id="os-overhead"
-                  min={1}
-                  max={8}
-                  step={0.5}
-                  value={[osOverhead]}
-                  onValueChange={(value) => setOsOverhead(value[0])}
-                />
-                <p className="text-sm text-right">{osOverhead} GB</p>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="context-window" className="font-semibold">Context Window (Tokens)</Label>
-                <Input
-                  id="context-window"
-                  type="number"
-                  value={contextWindow}
-                  onChange={(e) => setContextWindow(Number(e.target.value))}
-                  min={1}
-                  step={1}
-                />
+          <div className="text-center space-y-2">
+            <p className="text-4xl font-bold tabular-nums">{effectiveRam}</p>
+            <p className="text-xl">GB RAM</p>
+          </div>
+          <div className="text-center space-y-2">
+            <p className="text-4xl font-bold">{quantization}</p>
+            <p className="text-xl">Quantization</p>
+          </div>
+
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="ram-slider" className="text-lg font-semibold">Available RAM (GB)</Label>
+              <Slider
+                id="ram-slider"
+                min={0}
+                max={ramOptions.length - 1}
+                step={1}
+                value={[ramOptions.indexOf(availableRam)]}
+                onValueChange={handleRamChange}
+                className="w-full"
+              />
+              <div className="flex justify-between text-sm text-muted-foreground">
+                {ramOptions.map((value) => (
+                  <span key={value}>{value}</span>
+                ))}
               </div>
             </div>
-          </PopoverContent>
-        </Popover>
-      </div>
+            <div>
+              <Label htmlFor="quantization" className="text-lg font-semibold">Quantization Level</Label>
+              <Select value={quantization} onValueChange={(value) => setQuantization(value as QuantizationOption)}>
+                <SelectTrigger id="quantization" className="w-full text-xl">
+                  <SelectValue placeholder="Select quantization" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.keys(quantizationOptions).map((option) => (
+                    <SelectItem key={option} value={option} className="text-lg">
+                      {option}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="w-full text-lg">
+                  <Settings className="mr-2 h-5 w-5" />
+                  Advanced Settings
+                  <ChevronDown className="ml-auto h-5 w-5" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-full p-4">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="custom-ram" className="font-semibold">Custom RAM (GB)</Label>
+                    <Input
+                      id="custom-ram"
+                      type="number"
+                      value={customRam}
+                      onChange={(e) => {
+                        setCustomRam(Number(e.target.value))
+                        setUseCustomRam(true)
+                      }}
+                      min={1}
+                      step={1}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="os-overhead" className="font-semibold">OS Overhead (GB)</Label>
+                    <Slider
+                      id="os-overhead"
+                      min={1}
+                      max={8}
+                      step={0.5}
+                      value={[osOverhead]}
+                      onValueChange={(value) => setOsOverhead(value[0])}
+                    />
+                    <p className="text-sm text-right">{osOverhead} GB</p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="context-window" className="font-semibold">Context Window (Tokens)</Label>
+                    <Input
+                      id="context-window"
+                      type="number"
+                      value={contextWindow}
+                      onChange={(e) => setContextWindow(Number(e.target.value))}
+                      min={1}
+                      step={1}
+                    />
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+        </div>
+      </main>
+
+      <footer className="sticky bottom-0 bg-background shadow-md mt-8">
+        <div className="container mx-auto py-4">
+          <div className="flex justify-center space-x-6">
+            <a href="https://x.com/RayFernando1337" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-foreground transition-colors">
+              <span className="sr-only">Twitter</span>
+              <Twitter className="h-6 w-6" />
+            </a>
+            <a href="https://youtube.com/@RayFernando1337" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-foreground transition-colors">
+              <span className="sr-only">YouTube</span>
+              <Youtube className="h-6 w-6" />
+            </a>
+            <a href="https://github.com/RayFernando1337" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-foreground transition-colors">
+              <span className="sr-only">GitHub</span>
+              <Github className="h-6 w-6" />
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
