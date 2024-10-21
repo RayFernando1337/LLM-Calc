@@ -1,7 +1,6 @@
 import * as React from "react"
 import { ChevronDown, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -22,7 +21,7 @@ const quantizationOptions = {
 
 type QuantizationOption = keyof typeof quantizationOptions
 
-const ramOptions = [8, 16, 32, 64, 128, 256, 512]
+const ramOptions = [8, 16, 32, 64, 128, 256]
 
 function calculateMaxParameters(availableRamGb: number, bitsPerParameter: number, osOverheadGb: number, contextWindow: number) {
   const bytesPerParameter = bitsPerParameter / 8
@@ -50,13 +49,13 @@ export default function LlmRamCalculator() {
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader className="text-center">
+    <div className="w-full max-w-md mx-auto">
+      <div className="text-center">
         <h1 className="text-3xl font-bold">LLM RAM Calculator</h1>
-      </CardHeader>
-      <CardContent className="space-y-6">
+      </div>
+      <div className="space-y-6">
         <div className="text-center space-y-2">
-          <p className="text-5xl font-bold tabular-nums">{maxParameters.toFixed(2)}</p>
+          <p className="text-5xl font-bold tabular-nums text-green-600">{maxParameters.toFixed(2)}</p>
           <p className="text-2xl">billion parameters</p>
         </div>
         <div className="text-center space-y-2">
@@ -67,8 +66,8 @@ export default function LlmRamCalculator() {
           <p className="text-4xl font-bold">{quantization}</p>
           <p className="text-xl">Quantization</p>
         </div>
-      </CardContent>
-      <CardFooter className="flex flex-col space-y-4">
+      </div>
+      <div className="flex flex-col space-y-4">
         <div className="w-full space-y-2">
           <Label htmlFor="ram-slider" className="text-lg font-semibold">Available RAM (GB)</Label>
           <Slider
@@ -151,7 +150,7 @@ export default function LlmRamCalculator() {
             </div>
           </PopoverContent>
         </Popover>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   )
 }
