@@ -1,10 +1,12 @@
-import { useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import * as React from "react"
+import { ChevronDown, Settings } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 const quantizationOptions = {
   "1-bit": 1,
@@ -20,6 +22,8 @@ const quantizationOptions = {
 
 type QuantizationOption = keyof typeof quantizationOptions
 
+const ramOptions = [8, 16, 32, 64, 128, 256, 512]
+
 function calculateMaxParameters(availableRamGb: number, bitsPerParameter: number, osOverheadGb: number, contextWindow: number) {
   const bytesPerParameter = bitsPerParameter / 8
   const totalRamBytes = availableRamGb * 1e9
@@ -29,100 +33,125 @@ function calculateMaxParameters(availableRamGb: number, bitsPerParameter: number
   return maxParameters / 1e9
 }
 
-export default function Component() {
-  const [availableRam, setAvailableRam] = useState(16)
-  const [osOverhead, setOsOverhead] = useState(2)
-  const [contextWindow, setContextWindow] = useState(2048)
-  const [quantization, setQuantization] = useState<QuantizationOption>("4-bit")
+export default function LlmRamCalculator() {
+  const [availableRam, setAvailableRam] = React.useState(16)
+  const [customRam, setCustomRam] = React.useState(16)
+  const [useCustomRam, setUseCustomRam] = React.useState(false)
+  const [osOverhead, setOsOverhead] = React.useState(2)
+  const [contextWindow, setContextWindow] = React.useState(2048)
+  const [quantization, setQuantization] = React.useState<QuantizationOption>("4-bit")
 
-  const maxParameters = calculateMaxParameters(availableRam, quantizationOptions[quantization], osOverhead, contextWindow)
+  const effectiveRam = useCustomRam ? customRam : availableRam
+  const maxParameters = calculateMaxParameters(effectiveRam, quantizationOptions[quantization], osOverhead, contextWindow)
+
+  const handleRamChange = (value: number[]) => {
+    setAvailableRam(ramOptions[value[0]])
+    setUseCustomRam(false)
+  }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-4xl font-bold mb-4">LLM RAM Calculator</h1>
-      <p className="mb-4">Available RAM: {availableRam} GB</p>
-      <p className="mb-4">You can update the available RAM, estimated OS RAM usage, and context window in the settings.</p>
-      
-      <div className="mb-4">
-        <label htmlFor="quantization" className="block text-sm font-medium text-gray-700 mb-2">Select a quantization level:</label>
-        <Select value={quantization} onValueChange={(value) => setQuantization(value as QuantizationOption)}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select quantization level" />
-          </SelectTrigger>
-          <SelectContent>
-            {Object.keys(quantizationOptions).map((option) => (
-              <SelectItem key={option} value={option}>
-                {option}
-              </SelectItem>
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader className="text-center">
+        <h1 className="text-3xl font-bold">LLM RAM Calculator</h1>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="text-center space-y-2">
+          <p className="text-5xl font-bold tabular-nums">{maxParameters.toFixed(2)}</p>
+          <p className="text-2xl">billion parameters</p>
+        </div>
+        <div className="text-center space-y-2">
+          <p className="text-4xl font-bold tabular-nums">{effectiveRam}</p>
+          <p className="text-xl">GB RAM</p>
+        </div>
+        <div className="text-center space-y-2">
+          <p className="text-4xl font-bold">{quantization}</p>
+          <p className="text-xl">Quantization</p>
+        </div>
+      </CardContent>
+      <CardFooter className="flex flex-col space-y-4">
+        <div className="w-full space-y-2">
+          <Label htmlFor="ram-slider" className="text-lg font-semibold">Available RAM (GB)</Label>
+          <Slider
+            id="ram-slider"
+            min={0}
+            max={ramOptions.length - 1}
+            step={1}
+            value={[ramOptions.indexOf(availableRam)]}
+            onValueChange={handleRamChange}
+            className="w-full"
+          />
+          <div className="flex justify-between text-sm text-muted-foreground">
+            {ramOptions.map((value) => (
+              <span key={value}>{value}</span>
             ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {maxParameters >= 0 ? (
-        <p className="text-2xl font-bold">
-          With <span className="text-blue-600">{quantization}</span> quantization and a context window of <span className="text-blue-600">{contextWindow}</span> tokens, you can run a model with up to <span className="text-green-600">{maxParameters.toFixed(2)} billion parameters</span>.
-        </p>
-      ) : (
-        <p className="text-2xl font-bold text-red-600">
-          The selected context window size is too large for the available RAM. Please adjust your settings.
-        </p>
-      )}
-
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button className="mt-4">Advanced Settings</Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-80">
-          <Card>
-            <CardHeader>
-              <CardTitle>Advanced Settings</CardTitle>
-              <CardDescription>Adjust parameters for more precise calculations</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div>
-                  <label htmlFor="ram" className="block text-sm font-medium text-gray-700">Available RAM (GB)</label>
-                  <Input
-                    id="ram"
-                    type="number"
-                    value={availableRam}
-                    onChange={(e) => setAvailableRam(Number(e.target.value))}
-                    min={1}
-                    step={8}
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="os-overhead" className="block text-sm font-medium text-gray-700">Estimated OS RAM Usage (GB)</label>
-                  <Slider
-                    id="os-overhead"
-                    value={[osOverhead]}
-                    onValueChange={(value) => setOsOverhead(value[0])}
-                    min={1}
-                    max={8}
-                    step={0.5}
-                    className="mt-1"
-                  />
-                  <span className="text-sm text-gray-500">{osOverhead} GB</span>
-                </div>
-                <div>
-                  <label htmlFor="context-window" className="block text-sm font-medium text-gray-700">Context Window (Tokens)</label>
-                  <Input
-                    id="context-window"
-                    type="number"
-                    value={contextWindow}
-                    onChange={(e) => setContextWindow(Number(e.target.value))}
-                    min={1}
-                    step={1}
-                    className="mt-1"
-                  />
-                </div>
+          </div>
+        </div>
+        <div className="w-full">
+          <Label htmlFor="quantization" className="text-lg font-semibold">Quantization Level</Label>
+          <Select value={quantization} onValueChange={(value) => setQuantization(value as QuantizationOption)}>
+            <SelectTrigger id="quantization" className="w-full text-xl">
+              <SelectValue placeholder="Select quantization" />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.keys(quantizationOptions).map((option) => (
+                <SelectItem key={option} value={option} className="text-lg">
+                  {option}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className="w-full text-lg">
+              <Settings className="mr-2 h-5 w-5" />
+              Advanced Settings
+              <ChevronDown className="ml-auto h-5 w-5" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-full p-4">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="custom-ram" className="font-semibold">Custom RAM (GB)</Label>
+                <Input
+                  id="custom-ram"
+                  type="number"
+                  value={customRam}
+                  onChange={(e) => {
+                    setCustomRam(Number(e.target.value))
+                    setUseCustomRam(true)
+                  }}
+                  min={1}
+                  step={1}
+                />
               </div>
-            </CardContent>
-          </Card>
-        </PopoverContent>
-      </Popover>
-    </div>
+              <div className="space-y-2">
+                <Label htmlFor="os-overhead" className="font-semibold">OS Overhead (GB)</Label>
+                <Slider
+                  id="os-overhead"
+                  min={1}
+                  max={8}
+                  step={0.5}
+                  value={[osOverhead]}
+                  onValueChange={(value) => setOsOverhead(value[0])}
+                />
+                <p className="text-sm text-right">{osOverhead} GB</p>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="context-window" className="font-semibold">Context Window (Tokens)</Label>
+                <Input
+                  id="context-window"
+                  type="number"
+                  value={contextWindow}
+                  onChange={(e) => setContextWindow(Number(e.target.value))}
+                  min={1}
+                  step={1}
+                />
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+      </CardFooter>
+    </Card>
   )
 }
