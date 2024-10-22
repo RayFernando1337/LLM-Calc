@@ -1,4 +1,6 @@
-import * as React from "react";
+import React from 'react'
+import Layout from './components/Layout'
+import './index.css'
 import { ChevronDown, Settings, Star } from "lucide-react";
 import { FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
@@ -99,6 +101,7 @@ export default function LlmRamCalculator() {
   };
 
   return (
+    <Layout>
     <div className="flex flex-col min-h-screen">
       <header className="sticky top-0 bg-background z-10 shadow-md">
         <div className="container mx-auto py-4 flex justify-center">
@@ -238,7 +241,7 @@ export default function LlmRamCalculator() {
                 href="https://x.com/RayFernando1337"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary hover:text-primary-foreground transition-colors"
+                className="text-primary hover:text-red-600 transition-colors"
               >
                 <span className="sr-only">Twitter</span>
                 <FaXTwitter className="h-6 w-6" />
@@ -247,7 +250,7 @@ export default function LlmRamCalculator() {
                 href="https://youtube.com/@RayFernando1337"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary hover:text-primary-foreground transition-colors"
+                className="text-primary hover:text-red-600 transition-colors"
               >
                 <span className="sr-only">YouTube</span>
                 <FaYoutube className="h-6 w-6" />
@@ -263,10 +266,10 @@ export default function LlmRamCalculator() {
                   handleClick();
                   setTimeout(() => {
                     window.open("https://github.com/RayFernando1337/LLM-Calc", "_blank", "noopener,noreferrer");
-                  }, 500); // 500 milliseconds = 0.5 seconds
+                  }, 500);
                 }}
               >
-                <Button className="flex items-center space-x-2">
+                <Button className="flex items-center space-x-2 hover:bg-red-600 hover:text-white transition-colors duration-200">
                   <Star className="h-5 w-5" />
                   <span>LLM-Calc</span>
                 </Button>
@@ -275,6 +278,7 @@ export default function LlmRamCalculator() {
           </div>
         </div>
       </footer>
-    </div>
+      </div>
+    </Layout>
   );
 }
