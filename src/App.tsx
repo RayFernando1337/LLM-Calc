@@ -1,5 +1,6 @@
 import * as React from "react";
-import { ChevronDown, Settings, Github, Twitter, Youtube, Star } from "lucide-react";
+import { ChevronDown, Settings, Star } from "lucide-react";
+import { FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -240,7 +241,7 @@ export default function LlmRamCalculator() {
                 className="text-primary hover:text-primary-foreground transition-colors"
               >
                 <span className="sr-only">Twitter</span>
-                <Twitter className="h-6 w-6" />
+                <FaXTwitter className="h-6 w-6" />
               </a>
               <a
                 href="https://youtube.com/@RayFernando1337"
@@ -249,7 +250,7 @@ export default function LlmRamCalculator() {
                 className="text-primary hover:text-primary-foreground transition-colors"
               >
                 <span className="sr-only">YouTube</span>
-                <Youtube className="h-6 w-6" />
+                <FaYoutube className="h-6 w-6" />
               </a>
             </div>
             <div className="flex-1 flex justify-end">
