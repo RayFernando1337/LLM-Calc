@@ -14,8 +14,8 @@ This project is a React + TypeScript + Vite application that calculates the maxi
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/llm-ram-calculator.git
-   cd llm-ram-calculator
+   git clone https://github.com/RayFernando1337/LLM-Calc.git
+   cd LLM-Calc
    ```
 
 2. Install dependencies:
