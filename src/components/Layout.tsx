@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, PropsWithChildren } from 'react'
 import { ThemeProvider, useTheme } from 'next-themes'
 
-const ThemeWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const ThemeWrapper: React.FC<PropsWithChildren> = ({ children }) => {
   const { theme, resolvedTheme } = useTheme()
 
   useEffect(() => {

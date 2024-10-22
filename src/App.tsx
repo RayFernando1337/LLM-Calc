@@ -105,14 +105,14 @@ export default function LlmRamCalculator() {
     <Layout>
       <div className="flex flex-col min-h-screen">
         <header className="sticky top-0 bg-background z-10 shadow-md">
-          <div className="container mx-auto py-4 flex justify-between items-center">
-            <HyperText className="text-3xl font-bold text-center block" text="LLM RAM Calculator" />
+          <div className="container mx-auto py-4 px-6 flex justify-between items-center">
+            <HyperText className="text-2xl md:text-3xl font-bold text-center block" text="LLM RAM Calculator" />
             <ThemeToggle />
           </div>
         </header>
 
-        <main className="flex-grow container mx-auto px-4 py-8 pb-24 md:pb-8">
-          <div className="max-w-md mx-auto space-y-6">
+        <main className="flex-grow container mx-auto px-4 py-6 md:py-8 overflow-y-auto">
+          <div className="max-w-md mx-auto space-y-6 pb-20 md:pb-0">
             <div className="text-center space-y-2">
               <p className="text-5xl font-bold tabular-nums text-green-600">
                 {maxParameters.toFixed(2)}
@@ -232,8 +232,8 @@ export default function LlmRamCalculator() {
           </div>
         </main>
 
-        <footer className="bg-background shadow-md mt-8 md:sticky md:bottom-0">
-          <div className="container mx-auto py-4 px-4 md:px-0">
+        <footer className="bg-background shadow-md mt-auto">
+          <div className="container mx-auto py-4 px-6">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
               <div className="flex items-center space-x-4 md:space-x-6 order-2 md:order-1">
                 <a
