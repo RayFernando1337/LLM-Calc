@@ -175,9 +175,9 @@ export default function LlmRamCalculator() {
               <Popover>
                 <PopoverTrigger asChild>
                   <Button variant="outline" className="w-full text-lg">
-                    <Settings className="mr-2 h-5 w-5" />
+                    <Settings className="mr-2 h-5 w-5" aria-hidden="true" />
                     Advanced Settings
-                    <ChevronDown className="ml-auto h-5 w-5" />
+                    <ChevronDown className="ml-auto h-5 w-5" aria-hidden="true" />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-4">
@@ -196,6 +196,7 @@ export default function LlmRamCalculator() {
                         }}
                         min={1}
                         step={1}
+                        aria-label="Custom RAM in GB"
                       />
                     </div>
                     <div className="space-y-2">
@@ -278,7 +279,7 @@ export default function LlmRamCalculator() {
                     size="sm"
                     className="flex items-center space-x-2 hover:bg-red-600 hover:text-white transition-colors duration-200 mb-4 md:mb-0"
                   >
-                    <Star className="h-4 w-4" />
+                    <Star className="h-4 w-4" aria-hidden="true" />
                     <span>LLM-Calc</span>
                   </Button>
                 </a>
