@@ -253,10 +253,23 @@ export default function LlmRamCalculator() {
               </a>
             </div>
             <div className="flex-1 flex justify-end">
-              <Button onClick={handleClick} className="flex items-center space-x-2">
-                <Star className="h-5 w-5" />
-                <span>Star Me</span>
-              </Button>
+              <a
+                href="https://github.com/RayFernando1337/LLM-Calc"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleClick();
+                  setTimeout(() => {
+                    window.open("https://github.com/RayFernando1337/LLM-Calc", "_blank", "noopener,noreferrer");
+                  }, 500); // 500 milliseconds = 0.5 seconds
+                }}
+              >
+                <Button className="flex items-center space-x-2">
+                  <Star className="h-5 w-5" />
+                  <span>Star Me</span>
+                </Button>
+              </a>
             </div>
           </div>
         </div>
