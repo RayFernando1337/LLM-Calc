@@ -1,74 +1,75 @@
 # LLM RAM Requirement Calculator
 
-This project is a Streamlit app that calculates the maximum number of parameters that can fit in RAM for different quantization levels of large language models (LLMs).
+This project is a React + TypeScript + Vite application that calculates the maximum number of parameters that can fit in RAM for different quantization levels of large language models (LLMs).
 
-## Requirements
+## Features
 
-- Python >= 3.10.0, < 3.11
-- Streamlit
+- Calculate maximum parameters based on available RAM, OS usage, context window size, and quantization level
+- Interactive UI built with React and TypeScript
+- Fast development with Vite and Hot Module Replacement (HMR)
+- Styling with Tailwind CSS
+
 
 ## Setup Instructions
 
-### On Replit
-
-1. Create a new Replit and select Python as the language.
-2. Import the project files or clone the repository if the project is hosted on GitHub.
-3. Install dependencies by adding them to the `pyproject.toml` or running the command `pip install streamlit`.
-4. Run the Streamlit app by executing `streamlit run main.py` in the Shell.
-
-### On Local Machine
-
-1. Clone the project or download the files.
-2. Navigate to the project directory.
-3. Set up a Python virtual environment:
-
+1. Clone the repository:
    ```bash
-   python3 -m venv venv
-   source venv/bin/activate # On Windows, use `venv\Scripts\activate`
+   git clone https://github.com/your-username/llm-ram-calculator.git
+   cd llm-ram-calculator
    ```
 
-4. Install dependencies. If you're using Poetry (recommended since the project uses a `pyproject.toml` file), run:
-
+2. Install dependencies:
    ```bash
-   poetry install
+   bun install
    ```
 
-   Alternatively, you can manually install Streamlit using pip:
-
+3. Start the development server:
    ```bash
-   pip install streamlit
+   bun run dev
    ```
 
-5. Run the Streamlit app:
+4. Open your browser and navigate to `http://localhost:5173` (or the port specified in the console output).
 
-   ```bash
-   streamlit run main.py
-   ```
+## Building for Production
+
+To create a production build:
+
+```bash
+bun run build
+```
+
+The built files will be in the `dist` directory.
 
 ## Usage
 
-Once the Streamlit app is running, it should be accessible via a web browser. For local setups, the default URL is usually http://localhost:8501. The app will prompt you to enter your available RAM in GB, estimated OS RAM usage, context window size, and choose a quantization level. After making your selections, the app will calculate and display the maximum number of parameters your setup can handle in billions.
+Once the application is running, you can:
 
-## Calculations
+1. Enter your available RAM in GB
+2. Estimate OS RAM usage in GB
+3. Set the context window size (number of tokens)
+4. Choose a quantization level (bits per parameter)
 
-The app calculates the maximum number of parameters that can fit in RAM based on the following inputs:
+The app will calculate and display the maximum number of parameters your setup can handle in billions.
 
-- Available RAM in GB
-- Estimated OS RAM usage in GB
-- Context window size (number of tokens)
-- Quantization level (bits per parameter)
+## Calculation Logic
 
-Here's how the calculation is performed:
+The calculation logic remains the same as in the previous version:
 
-1. Convert the available RAM and OS overhead from GB to bytes.
-2. Calculate the memory required for the context window by multiplying the number of tokens by 0.5 MB and converting it to bytes.
-3. Calculate the usable RAM in bytes by subtracting the OS overhead and context window memory from the total available RAM.
-4. Convert the quantization level from bits to bytes per parameter.
-5. Calculate the maximum number of parameters by dividing the usable RAM by the bytes per parameter.
-6. Convert the result from parameters to billions of parameters for display.
-
-The app also checks if the calculated maximum number of parameters is negative, which indicates that the context window size is too large for the available RAM. In such cases, an error message is displayed, suggesting the user to reduce the context window size or increase the available RAM.
+1. Convert available RAM and OS overhead from GB to bytes
+2. Calculate memory required for the context window
+3. Calculate usable RAM by subtracting OS overhead and context window memory
+4. Convert quantization level from bits to bytes per parameter
+5. Calculate maximum number of parameters
+6. Convert result to billions of parameters for display
 
 ## Contributing
 
-Contributions to the project are welcome! If you have suggestions or improvements, please feel free to fork the repository, make your changes, and submit a pull request.
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+[MIT License](LICENSE)
+
+## Acknowledgements
+
+This project was bootstrapped with Vite and uses React, TypeScript, and Tailwind CSS. It uses Bun as the JavaScript runtime and package manager.
