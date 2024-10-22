@@ -17,6 +17,7 @@ import {
 import { Slider } from "@/components/ui/slider";
 import HyperText from "./components/ui/hyper-text";
 import confetti from "canvas-confetti";
+import { ThemeToggle } from "./components/ThemeToggle";
 
 const quantizationOptions = {
   "1-bit": 1,
@@ -104,8 +105,9 @@ export default function LlmRamCalculator() {
     <Layout>
       <div className="flex flex-col min-h-screen">
         <header className="sticky top-0 bg-background z-10 shadow-md">
-          <div className="container mx-auto py-4 flex justify-center">
+          <div className="container mx-auto py-4 flex justify-between items-center">
             <HyperText className="text-3xl font-bold text-center block" text="LLM RAM Calculator" />
+            <ThemeToggle />
           </div>
         </header>
 
