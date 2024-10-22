@@ -78,18 +78,20 @@ export default function LlmRamCalculator() {
           <div className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="ram-slider" className="text-lg font-semibold">Available RAM (GB)</Label>
-              <Slider
-                id="ram-slider"
-                min={0}
-                max={ramOptions.length - 1}
-                step={1}
-                value={[ramOptions.indexOf(availableRam)]}
-                onValueChange={handleRamChange}
-                className="w-full"
-              />
-              <div className="flex justify-between text-sm text-muted-foreground">
+              <div className="px-2">
+                <Slider
+                  id="ram-slider"
+                  min={0}
+                  max={ramOptions.length - 1}
+                  step={1}
+                  value={[ramOptions.indexOf(availableRam)]}
+                  onValueChange={handleRamChange}
+                  className="w-full"
+                />
+              </div>
+              <div className="flex justify-between text-sm text-muted-foreground px-2">
                 {ramOptions.map((value) => (
-                  <span key={value}>{value}</span>
+                  <span key={value} className="w-8 text-center">{value}</span>
                 ))}
               </div>
             </div>
