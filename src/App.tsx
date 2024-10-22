@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
+import HyperText from "./components/ui/hyper-text"
 
 const quantizationOptions = {
   "1-bit": 1,
@@ -51,8 +52,11 @@ export default function LlmRamCalculator() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="sticky top-0 bg-background z-10 shadow-md">
-        <div className="container mx-auto py-4">
-          <h1 className="text-3xl font-bold text-center">LLM RAM Calculator</h1>
+        <div className="container mx-auto py-4 flex justify-center">
+          <HyperText
+            className="text-3xl font-bold text-center block"
+            text="LLM RAM Calculator"
+          />
         </div>
       </header>
 
