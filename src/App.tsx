@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from "./components/Layout";
 import "./index.css";
-import { ChevronDown, Settings, Star } from "lucide-react";
+import { ChevronDown, Settings, Star, Share2 } from "lucide-react";
 import { FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +18,7 @@ import { Slider } from "@/components/ui/slider";
 import HyperText from "./components/ui/hyper-text";
 import confetti from "canvas-confetti";
 import { ThemeToggle } from "./components/ThemeToggle";
+import { toast } from "@/hooks/use-toast";
 
 const quantizationOptions = {
   "1-bit": 1,
@@ -91,12 +92,12 @@ export default function LlmRamCalculator() {
   // Add URL parameter handling on initial load
   React.useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
-    
+
     // Parse and set initial values from URL parameters
-    const ramParam = searchParams.get('ram');
-    const quantParam = searchParams.get('quant');
-    const osParam = searchParams.get('os');
-    const contextParam = searchParams.get('context');
+    const ramParam = searchParams.get("ram");
+    const quantParam = searchParams.get("quant");
+    const osParam = searchParams.get("os");
+    const contextParam = searchParams.get("context");
 
     if (ramParam) {
       const ramValue = Number(ramParam);
@@ -134,34 +135,35 @@ export default function LlmRamCalculator() {
   // Update function to only include non-default values
   const updateURL = React.useCallback(() => {
     const searchParams = new URLSearchParams();
-    
+
     // Only include RAM if using slider or custom value
     if (!useCustomRam) {
       const defaultRamIndex = ramOptions.indexOf(16); // assuming 16 is default
       if (ramOptions.indexOf(availableRam) !== defaultRamIndex) {
-        searchParams.set('ram', availableRam.toString());
+        searchParams.set("ram", availableRam.toString());
       }
-    } else if (customRam !== 16) { // custom RAM that's not default
-      searchParams.set('ram', customRam.toString());
+    } else if (customRam !== 16) {
+      // custom RAM that's not default
+      searchParams.set("ram", customRam.toString());
     }
 
     // Only include quantization if not default (4-bit)
     if (quantization !== "4-bit") {
-      searchParams.set('quant', quantization);
+      searchParams.set("quant", quantization);
     }
 
     // Only include OS and context if they differ from defaults
     if (osOverhead !== 2) {
-      searchParams.set('os', osOverhead.toString());
+      searchParams.set("os", osOverhead.toString());
     }
     if (contextWindow !== 2048) {
-      searchParams.set('context', contextWindow.toString());
+      searchParams.set("context", contextWindow.toString());
     }
 
     const newURL = `${window.location.pathname}${
-      searchParams.toString() ? '?' + searchParams.toString() : ''
+      searchParams.toString() ? "?" + searchParams.toString() : ""
     }`;
-    window.history.replaceState({}, '', newURL);
+    window.history.replaceState({}, "", newURL);
   }, [useCustomRam, customRam, availableRam, quantization, osOverhead, contextWindow]);
 
   // Add effect to update URL when values change
@@ -182,12 +184,33 @@ export default function LlmRamCalculator() {
     setUseCustomRam(false);
   };
 
+  const handleShare = () => {
+    navigator.clipboard
+      .writeText(window.location.href)
+      .then(() => {
+        toast({
+          title: "Link copied!",
+          description: "The current configuration has been copied to your clipboard.",
+        });
+      })
+      .catch(() => {
+        toast({
+          title: "Failed to copy",
+          description: "An error occurred while trying to copy the link.",
+          variant: "destructive",
+        });
+      });
+  };
+
   return (
     <Layout>
       <div className="flex flex-col min-h-screen">
         <header className="sticky top-0 bg-background z-10 shadow-md">
           <div className="container mx-auto py-4 px-6 flex justify-between items-center">
-            <HyperText className="text-2xl md:text-3xl font-bold text-center block" text="LLM RAM Calculator" />
+            <HyperText
+              className="text-2xl md:text-3xl font-bold text-center block"
+              text="LLM RAM Calculator"
+            />
             <ThemeToggle />
           </div>
         </header>
@@ -208,6 +231,16 @@ export default function LlmRamCalculator() {
               <p className="text-4xl font-bold">{quantization}</p>
               <p className="text-xl">Quantization</p>
             </div>
+
+            {/* Add the share button here */}
+            <Button
+              onClick={handleShare}
+              className="w-full flex items-center justify-center space-x-2"
+              variant="outline"
+            >
+              <Share2 className="h-4 w-4" />
+              <span>Share Configuration</span>
+            </Button>
 
             <div className="space-y-4">
               <div className="space-y-2">
