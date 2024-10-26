@@ -6,13 +6,15 @@ import * as React from "react";
 import type { ToastActionElement, ToastProps } from "@/components/ui/toast";
 
 const TOAST_LIMIT = 1;
-const TOAST_REMOVE_DELAY = 1000;
+const TOAST_REMOVE_DELAY = 150; // Changed from 1000 to 150 to match animation duration
+const DEFAULT_TOAST_DURATION = 2000; // Add this line for 1 second duration
 
 type ToasterToast = ToastProps & {
   id: string;
   title?: React.ReactNode;
   description?: React.ReactNode;
   action?: ToastActionElement;
+  duration?: number; // Add this line
 };
 
 const actionTypes = {
@@ -137,7 +139,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, "id">;
 
-function toast({ ...props }: Toast) {
+function toast({ duration = DEFAULT_TOAST_DURATION, ...props }: Toast) {
   const id = genId();
 
   const update = (props: ToasterToast) =>
@@ -158,6 +160,9 @@ function toast({ ...props }: Toast) {
       },
     },
   });
+
+  // Add auto-dismiss after 1 second
+  setTimeout(dismiss, duration);
 
   return {
     id: id,
