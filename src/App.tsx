@@ -101,8 +101,14 @@ export default function LlmRamCalculator() {
     if (ramParam) {
       const ramValue = Number(ramParam);
       if (!isNaN(ramValue)) {
-        setCustomRam(ramValue);
-        setUseCustomRam(true);
+        // Check if the RAM value matches one of the predefined options
+        if (ramOptions.includes(ramValue)) {
+          setAvailableRam(ramValue);
+          setUseCustomRam(false);
+        } else {
+          setCustomRam(ramValue);
+          setUseCustomRam(true);
+        }
       }
     }
 
