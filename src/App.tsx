@@ -88,6 +88,81 @@ export default function LlmRamCalculator() {
   const [contextWindow, setContextWindow] = React.useState(2048);
   const [quantization, setQuantization] = React.useState<QuantizationOption>("4-bit");
 
+  // Add URL parameter handling on initial load
+  React.useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    
+    // Parse and set initial values from URL parameters
+    const ramParam = searchParams.get('ram');
+    const quantParam = searchParams.get('quant');
+    const osParam = searchParams.get('os');
+    const contextParam = searchParams.get('context');
+
+    if (ramParam) {
+      const ramValue = Number(ramParam);
+      if (!isNaN(ramValue)) {
+        setCustomRam(ramValue);
+        setUseCustomRam(true);
+      }
+    }
+
+    if (quantParam && Object.keys(quantizationOptions).includes(quantParam)) {
+      setQuantization(quantParam as QuantizationOption);
+    }
+
+    if (osParam) {
+      const osValue = Number(osParam);
+      if (!isNaN(osValue) && osValue >= 1 && osValue <= 8) {
+        setOsOverhead(osValue);
+      }
+    }
+
+    if (contextParam) {
+      const contextValue = Number(contextParam);
+      if (!isNaN(contextValue) && contextValue > 0) {
+        setContextWindow(contextValue);
+      }
+    }
+  }, []);
+
+  // Update function to only include non-default values
+  const updateURL = React.useCallback(() => {
+    const searchParams = new URLSearchParams();
+    
+    // Only include RAM if using slider or custom value
+    if (!useCustomRam) {
+      const defaultRamIndex = ramOptions.indexOf(16); // assuming 16 is default
+      if (ramOptions.indexOf(availableRam) !== defaultRamIndex) {
+        searchParams.set('ram', availableRam.toString());
+      }
+    } else if (customRam !== 16) { // custom RAM that's not default
+      searchParams.set('ram', customRam.toString());
+    }
+
+    // Only include quantization if not default (4-bit)
+    if (quantization !== "4-bit") {
+      searchParams.set('quant', quantization);
+    }
+
+    // Only include OS and context if they differ from defaults
+    if (osOverhead !== 2) {
+      searchParams.set('os', osOverhead.toString());
+    }
+    if (contextWindow !== 2048) {
+      searchParams.set('context', contextWindow.toString());
+    }
+
+    const newURL = `${window.location.pathname}${
+      searchParams.toString() ? '?' + searchParams.toString() : ''
+    }`;
+    window.history.replaceState({}, '', newURL);
+  }, [useCustomRam, customRam, availableRam, quantization, osOverhead, contextWindow]);
+
+  // Add effect to update URL when values change
+  React.useEffect(() => {
+    updateURL();
+  }, [useCustomRam, customRam, quantization, osOverhead, contextWindow, updateURL]);
+
   const effectiveRam = useCustomRam ? customRam : availableRam;
   const maxParameters = calculateMaxParameters(
     effectiveRam,
