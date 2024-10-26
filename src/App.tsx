@@ -33,7 +33,7 @@ const quantizationOptions = {
 
 type QuantizationOption = keyof typeof quantizationOptions;
 
-const ramOptions = [8, 16, 32, 64, 128, 256];
+const ramOptions = [8, 16, 32, 64, 128, 192, 256, 512];
 
 function calculateMaxParameters(
   availableRamGb: number,
@@ -133,7 +133,7 @@ export default function LlmRamCalculator() {
                 <Label htmlFor="ram-slider" className="text-lg font-semibold">
                   Available RAM (GB)
                 </Label>
-                <div className="px-2">
+                <div className="px-4">
                   <Slider
                     id="ram-slider"
                     min={0}
