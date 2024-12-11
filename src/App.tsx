@@ -34,7 +34,7 @@ const quantizationOptions = {
 
 type QuantizationOption = keyof typeof quantizationOptions;
 
-const ramOptions = [8, 16, 24, 32, 64, 128, 192, 256, 512];
+const ramOptions = [8, 16, 24, 32, 48, 64, 128, 192];
 
 function calculateMaxParameters(
   availableRamGb: number,
