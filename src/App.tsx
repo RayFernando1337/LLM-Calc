@@ -1,8 +1,3 @@
-import React from "react";
-import Layout from "./components/Layout";
-import "./index.css";
-import { ChevronDown, Settings, Star, Share2 } from "lucide-react";
-import { FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,10 +10,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import HyperText from "./components/ui/hyper-text";
-import confetti from "canvas-confetti";
-import { ThemeToggle } from "./components/ThemeToggle";
 import { toast } from "@/hooks/use-toast";
+import confetti from "canvas-confetti";
+import { ChevronDown, Settings, Share2, Star } from "lucide-react";
+import React from "react";
+import { FaXTwitter, FaYoutube } from "react-icons/fa6";
+import Layout from "./components/Layout";
+import { ThemeToggle } from "./components/ThemeToggle";
+import HyperText from "./components/ui/hyper-text";
+import "./index.css";
 
 const quantizationOptions = {
   "1-bit": 1,
@@ -34,7 +34,7 @@ const quantizationOptions = {
 
 type QuantizationOption = keyof typeof quantizationOptions;
 
-const ramOptions = [8, 16, 24, 32, 48, 64, 128, 192];
+const ramOptions = [8, 16, 24, 32, 48, 64, 128, 192, 256, 384, 512];
 
 function calculateMaxParameters(
   availableRamGb: number,
